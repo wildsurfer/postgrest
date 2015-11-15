@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## Unreleased
+
+### Added
+- Ensure JWT expires - @calebmer
+- Postgres connection string argument - @calebmer
+
+### Removed
+- API versioning feature - @calebmer
+- `--db-x` command line arguments - @calebmer
+- Secure flag - @calebmer
+
 ## [0.2.12.1] - 2015-11-12
 
 ### Fixed
