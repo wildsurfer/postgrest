@@ -15,10 +15,8 @@ import           PostgREST.Middleware
 import           Control.Monad                        (unless, void)
 import           Control.Monad.IO.Class               (liftIO)
 import           Data.Aeson                           (encode)
-import           Data.Functor.Identity
 import           Data.Monoid                          ((<>))
 import           Data.String.Conversions              (cs)
-import           Data.Text                            (Text)
 import           Data.Time.Clock.POSIX                (getPOSIXTime)
 import qualified Hasql                                as H
 import qualified Hasql.Postgres                       as P
@@ -37,9 +35,7 @@ import           Control.Exception.Base               (throwTo, AsyncException(.
 #endif
 
 isServerVersionSupported :: H.Session P.Postgres IO Bool
-isServerVersionSupported = do
-  Identity (row :: Text) <- H.tx Nothing $ H.singleEx [H.stmt|SHOW server_version_num|]
-  return $ read (cs row) >= minimumPgVersion
+isServerVersionSupported = return True
 
 hasqlError :: PgError -> IO a
 hasqlError = error . cs . encode
