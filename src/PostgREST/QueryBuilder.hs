@@ -28,35 +28,50 @@ module PostgREST.QueryBuilder (
   , unquoted
   ) where
 
-import qualified Hasql.Query             as H
-import qualified Hasql.Encoders          as HE
-import qualified Hasql.Decoders          as HD
+import qualified Hasql.Query                   as H
+import qualified Hasql.Encoders                as HE
+import qualified Hasql.Decoders                as HD
 
-import qualified Data.Aeson              as JSON
+import qualified Data.Aeson                    as JSON
 import           Data.Int
 
-import           PostgREST.RangeQuery    (NonnegRange, rangeLimit, rangeOffset)
-import           Control.Error           (note, fromMaybe, mapMaybe)
-import qualified Data.HashMap.Strict     as HM
-import           Data.List               (find, (\\))
-import           Data.Monoid             ((<>))
-import           Data.Text               (Text, unwords, replace, isInfixOf, toLower, split)
-import qualified Data.Text as T          (map, takeWhile)
-import           Data.String.Conversions (cs)
-import           Control.Applicative     (empty, (<|>))
-import           Control.Monad           (join)
-import           Data.Tree               (Tree(..))
-import qualified Data.Vector as V
+import           Control.Applicative           (empty, (<|>))
+import           Control.Error                 (fromMaybe, mapMaybe, note)
+import           Control.Monad                 (join)
+import qualified Data.ByteString.Char8         as BS
+import qualified Data.HashMap.Strict           as HM
+import           Data.List                     (find, (\\))
+import qualified Data.Map                      as M
+import           Data.Monoid                   ((<>))
+import           Data.Scientific               (FPFormat (..), formatScientific,
+                                                isInteger)
+import           Data.String.Conversions       (cs)
+import           Data.Text                     (Text, isInfixOf, replace, split,
+                                                toLower, unwords)
+import qualified Data.Text                     as T (map, takeWhile)
+import           Data.Tree                     (Tree (..))
+import qualified Data.Vector                   as V
+import           PostgREST.ApiRequest          (PreferRepresentation (..))
+import           PostgREST.RangeQuery          (NonnegRange, rangeLimit,
+                                                rangeOffset)
 import           PostgREST.Types
-import qualified Data.Map as M
-import           Text.Regex.TDFA         ((=~))
-import qualified Data.ByteString.Char8   as BS
-import           Data.Scientific         ( FPFormat (..)
-                                         , formatScientific
-                                         , isInteger
-                                         )
-import           Prelude hiding          (unwords)
-import           PostgREST.ApiRequest    (PreferRepresentation (..))
+import           Prelude                       hiding (unwords)
+import           Text.InterpolatedString.Perl6 (qc)
+import           Text.Regex.TDFA               ((=~))
+
+type Escaped = BS.ByteString
+
+pgFmtIdent :: BS.ByteString -> Escaped
+pgFmtIdent x = "\"" <> replace "\"" "\"\"" (trimNullChars $ cs x) <> "\""
+
+pgFmtLit :: SqlFragment -> Escaped
+pgFmtLit x =
+ let trimmed = trimNullChars x
+     escaped = "'" <> replace "'" "''" trimmed <> "'"
+     slashed = replace "\\" "\\\\" escaped in
+ if "\\\\" `isInfixOf` escaped
+   then "E" <> slashed
+   else slashed
 
 createReadStatement :: SqlFragment -> SqlFragment ->
                        NonnegRange -> Bool -> Bool -> Bool ->
@@ -203,64 +218,90 @@ operators = [
   ("<@", "<@")
   ]
 
-pgFmtIdent :: SqlFragment -> SqlFragment
-pgFmtIdent x = "\"" <> replace "\"" "\"\"" (trimNullChars $ cs x) <> "\""
-
-pgFmtLit :: SqlFragment -> SqlFragment
-pgFmtLit x =
- let trimmed = trimNullChars x
-     escaped = "'" <> replace "'" "''" trimmed <> "'"
-     slashed = replace "\\" "\\\\" escaped in
- if "\\\\" `isInfixOf` escaped
-   then "E" <> slashed
-   else slashed
-
-requestToCountQuery :: Schema -> DbRequest -> SqlFragment
-requestToCountQuery _ (DbMutate _) = undefined
-requestToCountQuery schema (DbRead (Node (Select _ _ conditions _, (mainTbl, _)) _)) = unwords [
-     "SELECT pg_catalog.count(1)",
-     "FROM ", fromQi $ QualifiedIdentifier schema mainTbl,
-     ("WHERE " <> BS.intercalate " AND " ( map (pgFmtCondition (QualifiedIdentifier schema mainTbl)) localConditions )) `emptyOnNull` localConditions
-   ]
+-- | Unspecified decoder because this will be
+-- transofmred into another kind of Query
+select :: [Escaped] -> [Escaped] -> H.Query () ()
+select cols tables =
+  H.Query sql HE.unit HD.unit True
  where
-   fn  (Filter{value=VText _}) = True
-   fn  (Filter{value=VForeignKey _ _}) = False
-   localConditions = filter fn conditions
+  selection = BS.intercalate "," cols
+  from = BS.intercalate "," tables
+  sql = [qc|
+      SELECT {selection}
+      FROM {from}
+    |]
+
+countT :: H.Query a b -> H.Query a Int64
+countT (H.Query sql enc _ prep) =
+  H.Query sql' enc (HD.singleRow (HD.value HD.int8)) prep
+ where
+  sql' = [qc|
+      SELECT pg_catalog.count(1)
+      FROM ({sql}) AS countme
+    |]
+
+orderByT :: [Escaped] ->
+  H.Query a b -> H.Query a b
+orderByT [] q = q
+orderByT cols (H.Query sql enc dec prep) =
+  H.Query sql' enc dec prep
+ where
+  sql'  = [qc| {sql} ORDER BY {order} |]
+  order = BS.intercalate "," cols
+
+whereT :: [Escaped] ->
+  H.Query a b -> H.Query a b
+whereT [] q = q
+whereT conditions (H.Query sql enc dec prep) =
+  H.Query sql' enc dec prep
+ where
+  sql'   = [qc| {sql} WHERE {clause} |]
+  clause = BS.intercalate " AND " conditions
+
+leftJoinT :: [Escaped] ->
+  H.Query a b -> H.Query a b
+leftJoinT [] q = q
+leftJoinT conditions (H.Query sql enc dec prep) =
+  H.Query sql' enc dec prep
+ where
+  sql'   = [qc| LEFT OUTER JOIN {sql} ON {clause} |]
+  clause = BS.intercalate " AND " $ map (pgFmtCondition qi) conditions
+
+requestToCountQuery :: Schema -> DbRequest -> H.Query () Int64
+requestToCountQuery _ (DbMutate _) = undefined
+requestToCountQuery schema (DbRead (Node (Select _ _ conditions _, (mainTbl, _)) _)) =
+  countT . whereT localConditions $ select ["1"] [qi]
+ where
+  isText  (Filter{value=VText _}) = True
+  isText  (Filter{value=VForeignKey _ _}) = False
+  localConditions = map (pgFmtCondition qi) $ filter isText conditions
+  qi = QualifiedIdentifier schema mainTbl
+
+escapeOrderTerm :: OrderTerm -> Escaped
+escapeOrderTerm ot =
+  cs $ (pgFmtColumn qi $ otTerm t) <> " "
+    <> show (otDirection t) <> " "
+    <> fromMaybe "" (show <$> otNullOrder t)
 
 requestToQuery :: Schema -> DbRequest -> SqlQuery
 requestToQuery _ (DbMutate (Insert _ (PayloadParseError _))) = undefined
 requestToQuery _ (DbMutate (Update _ (PayloadParseError _) _)) = undefined
 requestToQuery schema (DbRead (Node (Select colSelects tbls conditions ord, (nodeName, maybeRelation)) forest)) =
-  query
-  where
+  orderByT (map escapeOrderTerm ord) . whereT whereConds $ select cols tables
+ where
+  qi = QualifiedIdentifier (tblSchema mainTbl) mainTbl
+  (joins, selects) = foldr getQueryParts ([],[]) forest
+  cols = map (pgFmtSelectItem qi) colSelects ++ selects
+  tables = map (fromQi . toQi) tbls
+  toQi t = QualifiedIdentifier (tblSchema t) t
+
+  parentTables = map snd joins
+  parentConditions = join $ map (( `filter` conditions ) . filterParentConditions) parentTables
+  localConditions = conditions \\ parentConditions
+  whereConds = map (pgFmtCondition qi) localConditions
+
     -- TODO! the folloing helper functions are just to remove the "schema" part when the table is "source" which is the name
     -- of our WITH query part
-    mainTbl = fromMaybe nodeName (tableName . relTable <$> maybeRelation)
-    tblSchema tbl = if tbl == sourceCTEName then "" else schema
-    qi = QualifiedIdentifier (tblSchema mainTbl) mainTbl
-    toQi t = QualifiedIdentifier (tblSchema t) t
-    query = unwords [
-      "SELECT ", BS.intercalate ", " (map (pgFmtSelectItem qi) colSelects ++ selects),
-      "FROM ", BS.intercalate ", " (map (fromQi . toQi) tbls),
-      unwords (map joinStr joins),
-      ("WHERE " <> BS.intercalate " AND " ( map (pgFmtCondition qi ) localConditions )) `emptyOnNull` localConditions,
-      orderF (fromMaybe [] ord)
-      ]
-    orderF ts =
-        if null ts
-            then ""
-            else "ORDER BY " <> clause
-        where
-            clause = BS.intercalate "," (map queryTerm ts)
-            queryTerm :: OrderTerm -> Text
-            queryTerm t = " "
-                <> cs (pgFmtColumn qi $ otTerm t) <> " "
-                <> (cs.show) (otDirection t) <> " "
-                <> maybe "" (cs.show) (otNullOrder t) <> " "
-    (joins, selects) = foldr getQueryParts ([],[]) forest
-    parentTables = map snd joins
-    parentConditions = join $ map (( `filter` conditions ) . filterParentConditions) parentTables
-    localConditions = conditions \\ parentConditions
     joinStr :: (SqlFragment, TableName) -> SqlFragment
     joinStr (sql, t) = "LEFT OUTER JOIN " <> sql <> " ON " <>
       BS.intercalate " AND " ( map (pgFmtCondition qi ) joinConditions )
@@ -417,7 +458,7 @@ pgFmtSelectItem :: QualifiedIdentifier -> SelectItem -> SqlFragment
 pgFmtSelectItem table (f@(_, jp), Nothing) = pgFmtField table f <> pgFmtAsJsonPath jp
 pgFmtSelectItem table (f@(_, jp), Just cast ) = "CAST (" <> pgFmtField table f <> " AS " <> cast <> " )" <> pgFmtAsJsonPath jp
 
-pgFmtCondition :: QualifiedIdentifier -> Filter -> SqlFragment
+pgFmtCondition :: QualifiedIdentifier -> Filter -> Escaped
 pgFmtCondition table (Filter (col,jp) ops val) =
   notOp <> " " <> sqlCol  <> " " <> pgFmtOperator opCode <> " " <>
     if opCode `elem` ["is","isnot"] then whiteList (getInner val) else sqlValue

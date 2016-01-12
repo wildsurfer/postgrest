@@ -37,7 +37,7 @@ executable postgrest
                      , cassava
                      , containers
                      , errors
-                     , hasql >= 0.15.1 && < 0.16
+                     , hasql >= 0.19.3.1 && < 0.20
                      , jwt
                      , optparse-applicative >= 0.11 && < 0.13
                      , parsec
@@ -93,6 +93,7 @@ library
                      , errors
                      , hasql
                      , http-types
+                     , interpolatedstring-perl6
                      , jwt
                      , optparse-applicative
                      , parsec
@@ -166,12 +167,12 @@ Test-Suite spec
                      , containers
                      , errors
                      , hasql
-                     , heredoc
                      , hlint
                      , hspec == 2.2.*
                      , hspec-wai
                      , hspec-wai-json
                      , http-types
+                     , interpolatedstring-perl6
                      , jwt
                      , optparse-applicative
                      , packdeps

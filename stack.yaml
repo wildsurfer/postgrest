@@ -3,5 +3,6 @@ packages:
 - '.'
 extra-deps:
   - Ranged-sets-0.3.0
-  - packdeps-0.4.1
-resolver: nightly-2015-10-27
+  - packdeps-0.4.2
+  - hasql-0.19.3.1
+resolver: lts-4.1
