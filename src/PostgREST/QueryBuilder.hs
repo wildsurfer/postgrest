@@ -265,7 +265,47 @@ leftJoinT conditions (H.Query sql enc dec prep) =
   H.Query sql' enc dec prep
  where
   sql'   = [qc| LEFT OUTER JOIN {sql} ON {clause} |]
-  clause = BS.intercalate " AND " $ map (pgFmtCondition qi) conditions
+  clause = BS.intercalate " AND " conditions
+
+jsonArrayT :: H.Query a b -> H.Query a HD.Value
+jsonArrayT (H.Query sql enc _ prep) =
+  H.Query sql' enc (HD.singleRow (HD.value HD.json)) prep
+ where
+   sql' = [qc| COALESCE (
+                 ( SELECT array_to_json(array_agg(row_to_json(jsonifyMe)))
+                   FROM ({sql}) jsonifyMe
+                 ), []
+               ) |]
+
+withT :: H.Query () () -> Escaped -> H.Query a b -> H.Query a b
+withT (H.Query withSql _ _ withPrep) alias (H.Query bodySql enc dec bodyPrep) =
+  H.Query sql' enc dec (withPrep && bodyPrep)
+ where
+  sql' = [qc| WITH ({withSql}) AS {alias} {bodySql} |]
+
+limitT :: NonnegRange -> H.Query a b -> H.Query a b
+limitT r (H.Query sql enc dec prep) =
+  H.Query sql' enc dec prep
+ where
+  sql' = [qc| {sql} LIMIT {lim} OFFSET {off} |]
+  lim  = maybe "ALL" (cs . show) $ rangeLimit r
+  off  = cs . show $ rangeOffset r
+
+csvT :: H.Query a b -> H.Query a ()
+csvT (H.Query sql enc _ prep) =
+  H.query sql' enc (HD.void) prep
+ where
+  sql' = [qc| WITH payload AS ({sql})
+              (SELECT string_agg(a.k, ',')
+                FROM (
+                  SELECT json_object_keys(r)::TEXT as k
+                  FROM (
+                    SELECT row_to_json(hh) as r from payload as hh limit 1
+                  ) s
+                ) a
+              ) || '\n' ||
+              coalesce(string_agg(substring(t::text, 2, length(t::text) - 2), '\n'), '')
+          |]
 
 requestToCountQuery :: Schema -> DbRequest -> H.Query () Int64
 requestToCountQuery _ (DbMutate _) = undefined
@@ -307,9 +347,19 @@ requestToQuery schema (DbRead (Node (Select colSelects tbls conditions ord, (nod
       BS.intercalate " AND " ( map (pgFmtCondition qi ) joinConditions )
       where
         joinConditions = filter (filterParentConditions t) conditions
+
     filterParentConditions parentTable (Filter _ _ (VForeignKey (QualifiedIdentifier "" t) _)) = parentTable == t
     filterParentConditions _ _ = False
+
     getQueryParts :: Tree ReadNode -> ([(SqlFragment, TableName)], [SqlFragment]) -> ([(SqlFragment,TableName)], [SqlFragment])
+
+
+    -- getQueryParts (Node n@(_, (name, Just (Relation {relType=Child, relTable=Table{tableName=table}}))) forst) (j,s) = (j,    sel:s)
+    -- getQueryParts (Node n@(_, (name, Just (Relation {relType=Parent,relTable=Table{tableName=table}}))) forst) (j,s) = (joi:j,sel:s)
+    -- getQueryParts (Node n@(_, (name, Just (Relation {relType=Many,  relTable=Table{tableName=table}}))) forst) (j,s) = (j,    sel:s)
+    -- getQueryParts (Node (_,(_,Nothing)) _) _ = undefined
+
+
     getQueryParts (Node n@(_, (name, Just (Relation {relType=Child,relTable=Table{tableName=table}}))) forst) (j,s) = (j,sel:s)
       where
         sel = "COALESCE(("
