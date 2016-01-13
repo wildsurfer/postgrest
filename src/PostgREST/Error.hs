@@ -11,12 +11,12 @@ import           Data.Monoid               ((<>))
 import           Data.String.Conversions   (cs)
 import           Data.Text                 (Text)
 import qualified Data.Text                 as T
-import qualified Hasql.Query               as H
+import qualified Hasql.Session             as H
 import           Network.HTTP.Types.Header
 import qualified Network.HTTP.Types.Status as HT
 import           Network.Wai               (Response, responseLBS)
 
-type PgError = H.ResultsError
+type PgError = H.Error
 
 errResponse :: HT.Status -> Text -> Response
 errResponse status message = responseLBS status [(hContentType, "application/json")] (cs $ T.concat ["{\"message\":\"",message,"\"}"])
