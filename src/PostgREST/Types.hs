@@ -65,7 +65,7 @@ data OrderTerm = OrderTerm {
   otTerm      :: Text
 , otDirection :: OrderDirection
 , otNullOrder :: Maybe OrderNulls
-} deriving (Eq)
+} deriving (Eq, Show)
 
 data QualifiedIdentifier = QualifiedIdentifier {
   qiSchema :: Schema
