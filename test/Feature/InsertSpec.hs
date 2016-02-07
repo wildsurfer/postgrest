@@ -109,6 +109,12 @@ spec struct c = beforeAll_ resetDb $ around (withApp cfgDefault struct c) $ do
             simpleHeaders p `shouldSatisfy` matchHeader hLocation "/no_pk\\?a=is.null&b=eq.foo"
             simpleStatus p `shouldBe` created201
 
+        it "returns url-encoded location header items" $ do
+          p <- request methodPost "/no_pk" [] [json| { "a":"hi\nbye", "b":"foo" } |]
+          liftIO $ do
+            simpleHeaders p `shouldSatisfy` matchHeader hLocation "/no_pk\\?a=eq.hi%0Abye&b=eq.foo"
+            simpleStatus p `shouldBe` created201
+
     context "with compound pk supplied" $
       it "builds response location header appropriately" $
         post "/compound_pk" [json| { "k1":12, "k2":42 } |]

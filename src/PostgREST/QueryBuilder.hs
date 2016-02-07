@@ -396,13 +396,14 @@ locationF :: [Text] -> SqlFragment
 locationF pKeys =
     "(" <>
     " WITH s AS (SELECT row_to_json(ss) as r from " <> sourceCTEName <> " as ss  limit 1)" <>
-    " SELECT string_agg(json_data.key || '=' || coalesce( 'eq.' || json_data.value, 'is.null'), '&')" <>
-    " FROM s, json_each_text(s.r) AS json_data" <>
+    " SELECT array_to_json(array_agg(location_cols))" <>
+    " FROM s, json_each_text(s.r) AS location_cols" <>
     (
       if null pKeys
       then ""
-      else " WHERE json_data.key IN ('" <> intercalate "','" pKeys <> "')"
-    ) <> ")"
+      else " WHERE location_cols.key IN ('" <> intercalate "','" pKeys <> "')"
+    ) <>
+    ")"
 
 limitF :: NonnegRange -> SqlFragment
 limitF r  = "LIMIT " <> limit <> " OFFSET " <> offset

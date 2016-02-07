@@ -4,12 +4,15 @@
 --module PostgREST.App where
 module PostgREST.App (
   app
+, mkFilter
 ) where
 
 import           Control.Applicative
 import           Control.Arrow             ((***))
 import           Control.Monad             (join)
+import qualified Data.Aeson                as JSON
 import           Data.Bifunctor            (first)
+import           Data.HashMap.Strict       (toList)
 import           Data.List                 (find, sortBy, delete)
 import           Data.Maybe                (isJust, fromMaybe, fromJust, mapMaybe)
 import           Data.Ord                  (comparing)
@@ -53,6 +56,7 @@ import           PostgREST.QueryBuilder ( callProc
                                         , addRelations
                                         , createReadStatement
                                         , createWriteStatement
+                                        , unquoted
                                         , ResultsWithCount
                                         )
 
@@ -111,7 +115,8 @@ app dbStructure conf reqBody req =
           let pKeys = map pkName $ filter (filterPk schema table) allPrKeys -- would it be ok to move primary key detection in the query itself?
           let stm = createWriteStatement qi sq mq isSingle (iPreferRepresentation apiRequest) pKeys (contentType == TextCSV) payload
           row <- H.query uniform stm
-          let (_, _, location, body) = extractQueryResult row
+          let (_, _, locationJson, body) = extractQueryResult row
+              location = fromMaybe "nope" $ mkFilter <$> JSON.decode (cs locationJson)
           return $ responseLBS status201
             [
               contentTypeH,
@@ -334,6 +339,23 @@ instance ToJSON TableOptions where
       "columns" .= tblOptcolumns t
     , "pkey"   .= tblOptpkey t ]
 
-
 extractQueryResult :: Maybe ResultsWithCount -> ResultsWithCount
 extractQueryResult = fromMaybe (Nothing, 0, "", "")
+
+{-|
+Create a query string whose keys and values come from a JSON object. Useful for
+constructing a Location header
+
+e.g. { "a": "x", "b": null, "c": true } => ?a=eq.x&b=is.null&c=is.true
+-}
+mkFilter :: JSON.Value -> String
+mkFilter (JSON.Object obj) =
+  urlEncodeVars . map (join (***) cs) . toList $ mkFilterByType <$> obj
+ where
+  mkFilterByType :: JSON.Value -> Text
+  mkFilterByType str@(JSON.String _) = "eq." <> unquoted str
+  mkFilterByType num@(JSON.Number _) = "eq." <> unquoted num
+  mkFilterByType b@(JSON.Bool _)     = "is." <> unquoted b
+  mkFilterByType JSON.Null           = "is.null"
+  mkFilterByType _                   = ""
+mkFilter _ = ""
