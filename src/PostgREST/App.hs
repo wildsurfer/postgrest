@@ -53,6 +53,7 @@ import           PostgREST.QueryBuilder ( callProc
                                         , addRelations
                                         , createReadStatement
                                         , createWriteStatement
+                                        , lockRowExclusive
                                         , ResultsWithCount
                                         )
 
@@ -119,19 +120,12 @@ app dbStructure conf reqBody req =
             ]
             $ if iPreferRepresentation apiRequest == Full then cs body else ""
 
-    (ActionUpdate, TargetIdent qi, Just payload@(PayloadJSON uniform)) ->
+    (ActionUpdate, TargetIdent qi, Just (PayloadJSON _)) ->
       case mutateSqlParts of
         Left e -> return $ responseLBS status400 [jsonH] $ cs e
-        Right (sq,mq) -> do
-          let stm = createWriteStatement qi sq mq False (iPreferRepresentation apiRequest) [] (contentType == TextCSV) payload
-          row <- H.query uniform stm
-          let (_, queryTotal, _, body) = extractQueryResult row
-              r = contentRangeH 0 (toInteger $ queryTotal-1) (toInteger <$> Just queryTotal)
-              s = case () of _ | queryTotal == 0 -> status404
-                               | iPreferRepresentation apiRequest == Full -> status200
-                               | otherwise -> status204
-          return $ responseLBS s [contentTypeH, r]
-            $ if iPreferRepresentation apiRequest == Full then cs body else ""
+        Right _ -> do
+          lockRowExclusive qi
+          return $ responseLBS status200 [] ""
 
     (ActionDelete, TargetIdent qi, Nothing) ->
       case mutateSqlParts of

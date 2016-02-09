@@ -19,6 +19,7 @@ module PostgREST.QueryBuilder (
   , createReadStatement
   , createWriteStatement
   , inTransaction
+  , lockRowExclusive
   , operators
   , pgFmtIdent
   , pgFmtLit
@@ -360,6 +361,11 @@ requestToQuery schema (DbMutate (Delete mainTbl conditions)) =
       "DELETE FROM ", fromQi qi,
       ("WHERE " <> intercalate " AND " ( map (pgFmtCondition qi ) conditions )) `emptyOnNull` conditions
       ]
+
+lockRowExclusive :: QualifiedIdentifier -> H.Session ()
+lockRowExclusive qi =
+  H.sql [qc| LOCK TABLE {fromQi qi} IN SHARE ROW EXCLUSIVE MODE; |]
+
 
 sourceCTEName :: SqlFragment
 sourceCTEName = "pg_source"

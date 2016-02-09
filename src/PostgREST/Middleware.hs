@@ -18,7 +18,7 @@ import           Network.Wai.Middleware.Gzip   (def, gzip)
 import           Network.Wai.Middleware.Static (only, staticPolicy)
 
 import           PostgREST.ApiRequest       (pickContentType)
-import           PostgREST.Auth                (setRole, jwtClaims, claimsToSQL)
+import           PostgREST.Auth                (jwtClaims, claimsToSQL)
 import           PostgREST.Config              (AppConfig (..), corsPolicy)
 import           PostgREST.Error               (errResponse)
 
@@ -30,7 +30,7 @@ runWithClaims :: AppConfig -> NominalDiffTime ->
                  (Request -> H.Session Response) ->
                  Request -> H.Session Response
 runWithClaims conf time app req = do
-    H.sql setAnon
+    -- H.sql setAnon
     case split (== ' ') (cs auth) of
       ("Bearer" : tokenStr : _) ->
         case jwtClaims jwtSecret tokenStr time of
@@ -46,8 +46,8 @@ runWithClaims conf time app req = do
     hdrs = requestHeaders req
     jwtSecret = configJwtSecret conf
     auth = fromMaybe "" $ lookup hAuthorization hdrs
-    anon = cs $ configAnonRole conf
-    setAnon = setRole anon
+    -- anon = cs $ configAnonRole conf
+    -- setAnon = setRole anon
     invalidJWT = return $ errResponse status400 "Invalid JWT"
 
 unsupportedAccept :: Application -> Application
