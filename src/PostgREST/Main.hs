@@ -17,7 +17,6 @@ import           Control.Monad                        (unless, void)
 import           Data.Monoid                          ((<>))
 import           Data.Pool
 import           Data.String.Conversions              (cs)
-import           Data.Time.Clock.POSIX                (getPOSIXTime)
 import qualified Hasql.Query                          as H
 import qualified Hasql.Connection                     as H
 import qualified Hasql.Session                        as H
@@ -93,10 +92,9 @@ main = do
 #endif
 
   runSettings appSettings $ middle $ \ req respond -> do
-    time <- getPOSIXTime
     body <- strictRequestBody req
     let handleReq = H.run $ inTransaction ReadCommitted
-          (runWithClaims conf time (app dbStructure conf body) req)
+          $ (app dbStructure conf body) req
     withResource pool $ \case
       Left err -> respond $ errResponse HT.status500 (cs . show $ err)
       Right c -> do
