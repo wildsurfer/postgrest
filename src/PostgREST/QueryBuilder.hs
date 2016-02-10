@@ -363,8 +363,10 @@ requestToQuery schema (DbMutate (Delete mainTbl conditions)) =
       ]
 
 lockRowExclusive :: QualifiedIdentifier -> H.Session ()
-lockRowExclusive _ =
+lockRowExclusive _ = do
+  H.sql "begin isolation level read committed;"
   H.sql "WITH pg_source AS (UPDATE \"public\".\"film\"  SET \"rating\"='1'::unknown  WHERE \"public\".\"film\".\"id\" = '1'::unknown ) SELECT 1;"
+  H.sql "commit;"
 
 
 sourceCTEName :: SqlFragment
