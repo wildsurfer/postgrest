@@ -363,8 +363,8 @@ requestToQuery schema (DbMutate (Delete mainTbl conditions)) =
       ]
 
 lockRowExclusive :: QualifiedIdentifier -> H.Session ()
-lockRowExclusive qi =
-  H.sql [qc| LOCK TABLE {fromQi qi} IN SHARE ROW EXCLUSIVE MODE; |]
+lockRowExclusive _ =
+  H.sql "WITH pg_source AS (UPDATE \"public\".\"film\"  SET \"rating\"='1'::unknown  WHERE \"public\".\"film\".\"id\" = '1'::unknown ) SELECT 1;"
 
 
 sourceCTEName :: SqlFragment
