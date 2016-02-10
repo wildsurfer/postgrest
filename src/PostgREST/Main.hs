@@ -10,7 +10,6 @@ import           PostgREST.Config                     (AppConfig (..),
                                                        readOptions)
 import           PostgREST.DbStructure
 import           PostgREST.Error                      (errResponse, pgErrResponse)
-import           PostgREST.QueryBuilder               (inTransaction, Isolation(..))
 
 import           Control.Monad                        (unless, void)
 import           Data.Monoid                          ((<>))
@@ -90,8 +89,8 @@ main = do
 
   runSettings appSettings $ \ req respond -> do
     body <- strictRequestBody req
-    let handleReq = H.run $ inTransaction ReadCommitted
-          $ (app dbStructure conf body) req
+    let handleReq = H.run $
+          (app dbStructure conf body) req
     withResource pool $ \case
       Left err -> respond $ errResponse HT.status500 (cs . show $ err)
       Right c -> do
