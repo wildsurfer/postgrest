@@ -67,7 +67,7 @@ main = do
                   $ defaultSettings
       middle = logStdout . defaultMiddle
 
-  pool <- createPool (H.acquire pgSettings)
+  pool <- createPool (putStrLn "Acquire connection" >> H.acquire pgSettings)
             (either (const $ return ()) H.release) 1 1 (configPool conf)
 
   dbStructure <- withResource pool $ \case
@@ -93,6 +93,7 @@ main = do
 #endif
 
   runSettings appSettings $ middle $ \ req respond -> do
+    putStrLn "Got request"
     time <- getPOSIXTime
     body <- strictRequestBody req
     let handleReq = H.run $ HT.run (runWithClaims conf time (app dbStructure conf body) req)
