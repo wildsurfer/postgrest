@@ -7,7 +7,7 @@ import           Data.Maybe                    (fromMaybe)
 import           Data.Text
 import           Data.String.Conversions       (cs)
 import           Data.Time.Clock               (NominalDiffTime)
-import qualified Hasql.Session                 as H
+import qualified Hasql.Transaction             as HT
 
 import           Network.HTTP.Types.Header     (hAccept, hAuthorization)
 import           Network.HTTP.Types.Status     (status415, status400)
@@ -27,17 +27,17 @@ import           Prelude hiding(concat)
 import qualified Data.Map.Lazy           as M
 
 runWithClaims :: AppConfig -> NominalDiffTime ->
-                 (Request -> H.Session Response) ->
-                 Request -> H.Session Response
+                 (Request -> HT.Transaction Response) ->
+                 Request -> HT.Transaction Response
 runWithClaims conf time app req = do
-    H.sql setAnon
+    HT.sql setAnon
     case split (== ' ') (cs auth) of
       ("Bearer" : tokenStr : _) ->
         case jwtClaims jwtSecret tokenStr time of
           Just claims ->
             if M.member "role" claims
             then do
-              mapM_ H.sql $ claimsToSQL claims
+              mapM_ HT.sql $ claimsToSQL claims
               app req
             else invalidJWT
           _ -> invalidJWT

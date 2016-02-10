@@ -31,7 +31,7 @@ import           Data.Aeson
 import           Data.Aeson.Types (emptyArray)
 import           Data.Monoid
 import qualified Data.Vector               as V
-import qualified Hasql.Session             as H
+import qualified Hasql.Transaction         as HT
 
 import           PostgREST.Config          (AppConfig (..))
 import           PostgREST.Parsers
@@ -58,7 +58,7 @@ import           PostgREST.QueryBuilder ( callProc
 
 import           Prelude
 
-app :: DbStructure -> AppConfig -> RequestBody -> Request -> H.Session Response
+app :: DbStructure -> AppConfig -> RequestBody -> Request -> HT.Transaction Response
 app dbStructure conf reqBody req =
   let
       -- TODO: blow up for Left values (there is a middleware that checks the headers)
@@ -78,7 +78,7 @@ app dbStructure conf reqBody req =
           if range == emptyRange
           then return $ errResponse status416 "HTTP Range error"
           else do
-            row <- H.query () stm
+            row <- HT.query () stm
             let (tableTotal, queryTotal, _ , body) = row
             if singular
             then return $ if queryTotal <= 0
@@ -110,7 +110,7 @@ app dbStructure conf reqBody req =
           let isSingle = (==1) $ V.length rows
           let pKeys = map pkName $ filter (filterPk schema table) allPrKeys -- would it be ok to move primary key detection in the query itself?
           let stm = createWriteStatement qi sq mq isSingle (iPreferRepresentation apiRequest) pKeys (contentType == TextCSV) payload
-          row <- H.query uniform stm
+          row <- HT.query uniform stm
           let (_, _, location, body) = extractQueryResult row
           return $ responseLBS status201
             [
@@ -124,7 +124,7 @@ app dbStructure conf reqBody req =
         Left e -> return $ responseLBS status400 [jsonH] $ cs e
         Right (sq,mq) -> do
           let stm = createWriteStatement qi sq mq False (iPreferRepresentation apiRequest) [] (contentType == TextCSV) payload
-          row <- H.query uniform stm
+          row <- HT.query uniform stm
           let (_, queryTotal, _, body) = extractQueryResult row
               r = contentRangeH 0 (toInteger $ queryTotal-1) (toInteger <$> Just queryTotal)
               s = case () of _ | queryTotal == 0 -> status404
@@ -140,7 +140,7 @@ app dbStructure conf reqBody req =
           let emptyUniform = UniformObjects V.empty
           let fakeload = PayloadJSON emptyUniform
           let stm = createWriteStatement qi sq mq False (iPreferRepresentation apiRequest) [] (contentType == TextCSV) fakeload
-          row <- H.query emptyUniform stm
+          row <- HT.query emptyUniform stm
           let (_, queryTotal, _, _) = extractQueryResult row
           return $ if queryTotal == 0
             then notFound
@@ -160,14 +160,14 @@ app dbStructure conf reqBody req =
 
     (ActionInvoke, TargetProc qi,
      Just (PayloadJSON (UniformObjects payload))) -> do
-      exists <- H.query qi doesProcExist
+      exists <- HT.query qi doesProcExist
       if exists
         then do
           let p = V.head payload
               jwtSecret = configJwtSecret conf
 
-          bodyJson <- H.query () (callProc qi p)
-          returnJWT <- H.query qi doesProcReturnJWT
+          bodyJson <- HT.query () (callProc qi p)
+          returnJWT <- HT.query qi doesProcReturnJWT
           return $ responseLBS status200 [jsonH]
                  (let body = fromMaybe emptyArray bodyJson in
                     if returnJWT
@@ -176,7 +176,7 @@ app dbStructure conf reqBody req =
         else return notFound
 
     (ActionRead, TargetRoot, Nothing) -> do
-      body <- encode <$> H.query schema accessibleTables
+      body <- encode <$> HT.query schema accessibleTables
       return $ responseLBS status200 [jsonH] $ cs body
 
     (ActionUnknown _, _, _) -> return notFound

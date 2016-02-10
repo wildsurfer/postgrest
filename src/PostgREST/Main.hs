@@ -11,7 +11,6 @@ import           PostgREST.Config                     (AppConfig (..),
 import           PostgREST.DbStructure
 import           PostgREST.Error                      (errResponse, pgErrResponse)
 import           PostgREST.Middleware
-import           PostgREST.QueryBuilder               (inTransaction, Isolation(..))
 
 import           Control.Monad                        (unless, void)
 import           Data.Monoid                          ((<>))
@@ -23,6 +22,7 @@ import qualified Hasql.Connection                     as H
 import qualified Hasql.Session                        as H
 import qualified Hasql.Decoders                       as HD
 import qualified Hasql.Encoders                       as HE
+import qualified Hasql.Transaction                    as HT
 import qualified Network.HTTP.Types.Status            as HT
 import           Network.Wai
 import           Network.Wai.Handler.Warp
@@ -95,8 +95,8 @@ main = do
   runSettings appSettings $ middle $ \ req respond -> do
     time <- getPOSIXTime
     body <- strictRequestBody req
-    let handleReq = H.run $ inTransaction ReadCommitted
-          (runWithClaims conf time (app dbStructure conf body) req)
+    let handleReq = H.run $ HT.run (runWithClaims conf time (app dbStructure conf body) req)
+                      HT.ReadCommitted HT.Write
     withResource pool $ \case
       Left err -> respond $ errResponse HT.status500 (cs . show $ err)
       Right c -> do
