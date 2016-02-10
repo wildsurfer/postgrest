@@ -10,7 +10,6 @@ import           PostgREST.Config                     (AppConfig (..),
                                                        readOptions)
 import           PostgREST.DbStructure
 import           PostgREST.Error                      (errResponse, pgErrResponse)
-import           PostgREST.Middleware
 import           PostgREST.QueryBuilder               (inTransaction, Isolation(..))
 
 import           Control.Monad                        (unless, void)
@@ -25,7 +24,6 @@ import qualified Hasql.Encoders                       as HE
 import qualified Network.HTTP.Types.Status            as HT
 import           Network.Wai
 import           Network.Wai.Handler.Warp
-import           Network.Wai.Middleware.RequestLogger (logStdout)
 import           System.IO                            (BufferMode (..),
                                                        hSetBuffering, stderr,
                                                        stdin, stdout)
@@ -64,7 +62,6 @@ main = do
       appSettings = setPort port
                   . setServerName (cs $ "postgrest/" <> prettyVersion)
                   $ defaultSettings
-      middle = logStdout . defaultMiddle
 
   pool <- createPool (H.acquire pgSettings)
             (either (const $ return ()) H.release) 1 1 (configPool conf)
@@ -91,7 +88,7 @@ main = do
     ) Nothing
 #endif
 
-  runSettings appSettings $ middle $ \ req respond -> do
+  runSettings appSettings $ \ req respond -> do
     body <- strictRequestBody req
     let handleReq = H.run $ inTransaction ReadCommitted
           $ (app dbStructure conf body) req
