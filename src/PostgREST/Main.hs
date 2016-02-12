@@ -82,6 +82,7 @@ main = do
 #ifndef mingw32_HOST_OS
   tid <- myThreadId
   void $ installHandler keyboardSignal (Catch $ do
+      putStrLn "Attempting to empty pool..."
       destroyAllResources pool
       throwTo tid UserInterrupt
     ) Nothing
