@@ -21,7 +21,6 @@ import qualified Hasql.Session                        as H
 import qualified Hasql.Decoders                       as HD
 import qualified Hasql.Encoders                       as HE
 import qualified Network.HTTP.Types.Status            as HT
-import           Network.Wai
 import           Network.Wai.Handler.Warp
 import           System.IO                            (BufferMode (..),
                                                        hSetBuffering, stderr,
@@ -35,6 +34,7 @@ import           Control.Exception.Base               (throwTo, AsyncException(.
 #endif
 
 import Data.Time.Clock.POSIX
+import System.Random (getStdRandom, randomR)
 
 isServerVersionSupported :: H.Session Bool
 isServerVersionSupported = do
@@ -96,9 +96,9 @@ main = do
 #endif
 
   runSettings appSettings $ \ req respond -> do
-    body <- strictRequestBody req
+    threadDelay =<< getStdRandom (randomR (0,1000000))
     let handleReq = H.run $
-          (app dbStructure conf body) req
+          (app dbStructure conf "") req
     withResource pool $ \case
       Left err -> respond $ errResponse HT.status500 (cs . show $ err)
       Right c -> do

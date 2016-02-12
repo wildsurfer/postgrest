@@ -40,6 +40,7 @@ executable postgrest
                      , optparse-applicative >= 0.11 && < 0.13
                      , parsec
                      , postgrest
+                     , random
                      , regex-tdfa
                      , resource-pool
                      , safe >= 0.3 && < 0.4
