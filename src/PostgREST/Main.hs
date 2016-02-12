@@ -11,7 +11,7 @@ import           PostgREST.Config                     (AppConfig (..),
 import           PostgREST.DbStructure
 import           PostgREST.Error                      (errResponse, pgErrResponse)
 
-import           Control.Monad                        (unless, void)
+import           Control.Monad                        (unless, void, forever)
 import           Data.Monoid                          ((<>))
 import           Data.Pool
 import           Data.String.Conversions              (cs)
@@ -30,9 +30,11 @@ import           Web.JWT                              (secret)
 
 #ifndef mingw32_HOST_OS
 import           System.Posix.Signals
-import           Control.Concurrent                   (myThreadId)
+import           Control.Concurrent                   (myThreadId, forkIO, threadDelay)
 import           Control.Exception.Base               (throwTo, AsyncException(..))
 #endif
+
+import Data.Time.Clock.POSIX
 
 isServerVersionSupported :: H.Session Bool
 isServerVersionSupported = do
@@ -61,6 +63,11 @@ main = do
       appSettings = setPort port
                   . setServerName (cs $ "postgrest/" <> prettyVersion)
                   $ defaultSettings
+
+  void . forkIO . forever $ do
+    t <- round <$> getPOSIXTime :: IO Integer
+    putStrLn $ "alive " ++ show t
+    threadDelay 1000000
 
   pool <- createPool (H.acquire pgSettings)
             (either (const $ return ()) H.release) 1 1 (configPool conf)
