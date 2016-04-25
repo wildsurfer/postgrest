@@ -5,7 +5,7 @@
 -- Dumped from database version 9.5.2
 -- Dumped by pg_dump version 9.5.2
 
--- Started on 2016-04-24 14:03:36 PDT
+-- Started on 2016-04-24 23:21:50 PDT
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
@@ -156,7 +156,7 @@ DROP SCHEMA public;
 DROP SCHEMA private;
 DROP SCHEMA postgrest;
 --
--- TOC entry 9 (class 2615 OID 33952)
+-- TOC entry 9 (class 2615 OID 41883)
 -- Name: postgrest; Type: SCHEMA; Schema: -; Owner: postgrest_test
 --
 
@@ -166,7 +166,7 @@ CREATE SCHEMA postgrest;
 ALTER SCHEMA postgrest OWNER TO postgrest_test;
 
 --
--- TOC entry 7 (class 2615 OID 33953)
+-- TOC entry 7 (class 2615 OID 41884)
 -- Name: private; Type: SCHEMA; Schema: -; Owner: postgrest_test
 --
 
@@ -186,7 +186,7 @@ CREATE SCHEMA public;
 ALTER SCHEMA public OWNER TO j;
 
 --
--- TOC entry 2627 (class 0 OID 0)
+-- TOC entry 2628 (class 0 OID 0)
 -- Dependencies: 8
 -- Name: SCHEMA public; Type: COMMENT; Schema: -; Owner: j
 --
@@ -195,7 +195,7 @@ COMMENT ON SCHEMA public IS 'standard public schema';
 
 
 --
--- TOC entry 11 (class 2615 OID 33954)
+-- TOC entry 11 (class 2615 OID 41885)
 -- Name: test; Type: SCHEMA; Schema: -; Owner: postgrest_test
 --
 
@@ -205,7 +205,7 @@ CREATE SCHEMA test;
 ALTER SCHEMA test OWNER TO postgrest_test;
 
 --
--- TOC entry 10 (class 2615 OID 33955)
+-- TOC entry 10 (class 2615 OID 41886)
 -- Name: تست; Type: SCHEMA; Schema: -; Owner: postgrest_test
 --
 
@@ -223,7 +223,7 @@ CREATE EXTENSION IF NOT EXISTS plpgsql WITH SCHEMA pg_catalog;
 
 
 --
--- TOC entry 2631 (class 0 OID 0)
+-- TOC entry 2632 (class 0 OID 0)
 -- Dependencies: 1
 -- Name: EXTENSION plpgsql; Type: COMMENT; Schema: -; Owner: 
 --
@@ -234,7 +234,7 @@ COMMENT ON EXTENSION plpgsql IS 'PL/pgSQL procedural language';
 SET search_path = public, pg_catalog;
 
 --
--- TOC entry 609 (class 1247 OID 33961)
+-- TOC entry 607 (class 1247 OID 41889)
 -- Name: big_jwt_claims; Type: TYPE; Schema: public; Owner: postgrest_test
 --
 
@@ -254,7 +254,7 @@ CREATE TYPE big_jwt_claims AS (
 ALTER TYPE big_jwt_claims OWNER TO postgrest_test;
 
 --
--- TOC entry 606 (class 1247 OID 33958)
+-- TOC entry 610 (class 1247 OID 41892)
 -- Name: jwt_claims; Type: TYPE; Schema: public; Owner: postgrest_test
 --
 
@@ -269,7 +269,7 @@ ALTER TYPE jwt_claims OWNER TO postgrest_test;
 SET search_path = test, pg_catalog;
 
 --
--- TOC entry 612 (class 1247 OID 33963)
+-- TOC entry 613 (class 1247 OID 41894)
 -- Name: enum_menagerie_type; Type: TYPE; Schema: test; Owner: postgrest_test
 --
 
@@ -284,7 +284,7 @@ ALTER TYPE enum_menagerie_type OWNER TO postgrest_test;
 SET search_path = postgrest, pg_catalog;
 
 --
--- TOC entry 226 (class 1255 OID 33967)
+-- TOC entry 238 (class 1255 OID 41899)
 -- Name: check_role_exists(); Type: FUNCTION; Schema: postgrest; Owner: postgrest_test
 --
 
@@ -304,7 +304,7 @@ $$;
 ALTER FUNCTION postgrest.check_role_exists() OWNER TO postgrest_test;
 
 --
--- TOC entry 227 (class 1255 OID 33968)
+-- TOC entry 239 (class 1255 OID 41900)
 -- Name: set_authors_only_owner(); Type: FUNCTION; Schema: postgrest; Owner: postgrest_test
 --
 
@@ -321,7 +321,7 @@ $$;
 ALTER FUNCTION postgrest.set_authors_only_owner() OWNER TO postgrest_test;
 
 --
--- TOC entry 228 (class 1255 OID 33969)
+-- TOC entry 240 (class 1255 OID 41901)
 -- Name: update_owner(); Type: FUNCTION; Schema: postgrest; Owner: postgrest_test
 --
 
@@ -344,7 +344,7 @@ SET default_tablespace = '';
 SET default_with_oids = false;
 
 --
--- TOC entry 187 (class 1259 OID 33970)
+-- TOC entry 187 (class 1259 OID 41902)
 -- Name: items; Type: TABLE; Schema: test; Owner: postgrest_test
 --
 
@@ -358,7 +358,7 @@ ALTER TABLE items OWNER TO postgrest_test;
 SET search_path = public, pg_catalog;
 
 --
--- TOC entry 229 (class 1255 OID 33973)
+-- TOC entry 241 (class 1255 OID 41905)
 -- Name: always_true(test.items); Type: FUNCTION; Schema: public; Owner: postgrest_test
 --
 
@@ -370,7 +370,7 @@ CREATE FUNCTION always_true(test.items) RETURNS boolean
 ALTER FUNCTION public.always_true(test.items) OWNER TO postgrest_test;
 
 --
--- TOC entry 230 (class 1255 OID 33974)
+-- TOC entry 242 (class 1255 OID 41906)
 -- Name: anti_id(test.items); Type: FUNCTION; Schema: public; Owner: postgrest_test
 --
 
@@ -384,7 +384,7 @@ ALTER FUNCTION public.anti_id(test.items) OWNER TO postgrest_test;
 SET search_path = test, pg_catalog;
 
 --
--- TOC entry 250 (class 1255 OID 33987)
+-- TOC entry 243 (class 1255 OID 41907)
 -- Name: callcounter(); Type: FUNCTION; Schema: test; Owner: postgrest_test
 --
 
@@ -398,7 +398,7 @@ $$;
 ALTER FUNCTION test.callcounter() OWNER TO postgrest_test;
 
 --
--- TOC entry 231 (class 1255 OID 33978)
+-- TOC entry 244 (class 1255 OID 41908)
 -- Name: getitemrange(bigint, bigint); Type: FUNCTION; Schema: test; Owner: postgrest_test
 --
 
@@ -412,7 +412,7 @@ $_$;
 ALTER FUNCTION test.getitemrange(min bigint, max bigint) OWNER TO postgrest_test;
 
 --
--- TOC entry 232 (class 1255 OID 33979)
+-- TOC entry 245 (class 1255 OID 41909)
 -- Name: insert_insertable_view_with_join(); Type: FUNCTION; Schema: test; Owner: postgrest_test
 --
 
@@ -429,7 +429,7 @@ $$;
 ALTER FUNCTION test.insert_insertable_view_with_join() OWNER TO postgrest_test;
 
 --
--- TOC entry 234 (class 1255 OID 33981)
+-- TOC entry 246 (class 1255 OID 41910)
 -- Name: jwt_test(); Type: FUNCTION; Schema: test; Owner: postgrest_test
 --
 
@@ -446,7 +446,7 @@ $$;
 ALTER FUNCTION test.jwt_test() OWNER TO postgrest_test;
 
 --
--- TOC entry 233 (class 1255 OID 33980)
+-- TOC entry 247 (class 1255 OID 41911)
 -- Name: login(text, text); Type: FUNCTION; Schema: test; Owner: postgrest_test
 --
 
@@ -460,7 +460,7 @@ $$;
 ALTER FUNCTION test.login(id text, pass text) OWNER TO postgrest_test;
 
 --
--- TOC entry 248 (class 1255 OID 33983)
+-- TOC entry 248 (class 1255 OID 41912)
 -- Name: problem(); Type: FUNCTION; Schema: test; Owner: postgrest_test
 --
 
@@ -476,7 +476,7 @@ $$;
 ALTER FUNCTION test.problem() OWNER TO postgrest_test;
 
 --
--- TOC entry 247 (class 1255 OID 33982)
+-- TOC entry 249 (class 1255 OID 41913)
 -- Name: reveal_big_jwt(); Type: FUNCTION; Schema: test; Owner: postgrest_test
 --
 
@@ -499,7 +499,7 @@ $$;
 ALTER FUNCTION test.reveal_big_jwt() OWNER TO postgrest_test;
 
 --
--- TOC entry 249 (class 1255 OID 33984)
+-- TOC entry 250 (class 1255 OID 41914)
 -- Name: sayhello(text); Type: FUNCTION; Schema: test; Owner: postgrest_test
 --
 
@@ -513,7 +513,7 @@ $_$;
 ALTER FUNCTION test.sayhello(name text) OWNER TO postgrest_test;
 
 --
--- TOC entry 251 (class 1255 OID 33988)
+-- TOC entry 251 (class 1255 OID 41915)
 -- Name: test_empty_rowset(); Type: FUNCTION; Schema: test; Owner: postgrest_test
 --
 
@@ -529,7 +529,7 @@ ALTER FUNCTION test.test_empty_rowset() OWNER TO postgrest_test;
 SET search_path = postgrest, pg_catalog;
 
 --
--- TOC entry 190 (class 1259 OID 33989)
+-- TOC entry 188 (class 1259 OID 41916)
 -- Name: auth; Type: TABLE; Schema: postgrest; Owner: postgrest_test
 --
 
@@ -545,7 +545,7 @@ ALTER TABLE auth OWNER TO postgrest_test;
 SET search_path = private, pg_catalog;
 
 --
--- TOC entry 191 (class 1259 OID 33996)
+-- TOC entry 189 (class 1259 OID 41923)
 -- Name: article_stars; Type: TABLE; Schema: private; Owner: postgrest_test
 --
 
@@ -559,7 +559,7 @@ CREATE TABLE article_stars (
 ALTER TABLE article_stars OWNER TO postgrest_test;
 
 --
--- TOC entry 192 (class 1259 OID 34000)
+-- TOC entry 190 (class 1259 OID 41927)
 -- Name: articles; Type: TABLE; Schema: private; Owner: postgrest_test
 --
 
@@ -575,19 +575,20 @@ ALTER TABLE articles OWNER TO postgrest_test;
 SET search_path = test, pg_catalog;
 
 --
--- TOC entry 223 (class 1259 OID 34149)
+-- TOC entry 191 (class 1259 OID 41933)
 -- Name: Escap3e;; Type: TABLE; Schema: test; Owner: postgrest_test
 --
 
 CREATE TABLE "Escap3e;" (
-    "so6meIdColumn" integer NOT NULL
+    "so6meIdColumn" integer NOT NULL,
+    "hyphenated-column" jsonb
 );
 
 
 ALTER TABLE "Escap3e;" OWNER TO postgrest_test;
 
 --
--- TOC entry 193 (class 1259 OID 34006)
+-- TOC entry 192 (class 1259 OID 41936)
 -- Name: articleStars; Type: VIEW; Schema: test; Owner: postgrest_test
 --
 
@@ -601,7 +602,7 @@ CREATE VIEW "articleStars" AS
 ALTER TABLE "articleStars" OWNER TO postgrest_test;
 
 --
--- TOC entry 194 (class 1259 OID 34010)
+-- TOC entry 193 (class 1259 OID 41940)
 -- Name: articles; Type: VIEW; Schema: test; Owner: postgrest_test
 --
 
@@ -615,7 +616,7 @@ CREATE VIEW articles AS
 ALTER TABLE articles OWNER TO postgrest_test;
 
 --
--- TOC entry 195 (class 1259 OID 34014)
+-- TOC entry 194 (class 1259 OID 41944)
 -- Name: authors_only; Type: TABLE; Schema: test; Owner: postgrest_test
 --
 
@@ -628,7 +629,7 @@ CREATE TABLE authors_only (
 ALTER TABLE authors_only OWNER TO postgrest_test;
 
 --
--- TOC entry 196 (class 1259 OID 34020)
+-- TOC entry 195 (class 1259 OID 41950)
 -- Name: auto_incrementing_pk; Type: TABLE; Schema: test; Owner: postgrest_test
 --
 
@@ -643,7 +644,7 @@ CREATE TABLE auto_incrementing_pk (
 ALTER TABLE auto_incrementing_pk OWNER TO postgrest_test;
 
 --
--- TOC entry 197 (class 1259 OID 34027)
+-- TOC entry 196 (class 1259 OID 41957)
 -- Name: auto_incrementing_pk_id_seq; Type: SEQUENCE; Schema: test; Owner: postgrest_test
 --
 
@@ -658,8 +659,8 @@ CREATE SEQUENCE auto_incrementing_pk_id_seq
 ALTER TABLE auto_incrementing_pk_id_seq OWNER TO postgrest_test;
 
 --
--- TOC entry 2638 (class 0 OID 0)
--- Dependencies: 197
+-- TOC entry 2639 (class 0 OID 0)
+-- Dependencies: 196
 -- Name: auto_incrementing_pk_id_seq; Type: SEQUENCE OWNED BY; Schema: test; Owner: postgrest_test
 --
 
@@ -667,7 +668,7 @@ ALTER SEQUENCE auto_incrementing_pk_id_seq OWNED BY auto_incrementing_pk.id;
 
 
 --
--- TOC entry 189 (class 1259 OID 33985)
+-- TOC entry 197 (class 1259 OID 41959)
 -- Name: callcounter_count; Type: SEQUENCE; Schema: test; Owner: postgrest_test
 --
 
@@ -682,7 +683,7 @@ CREATE SEQUENCE callcounter_count
 ALTER TABLE callcounter_count OWNER TO postgrest_test;
 
 --
--- TOC entry 198 (class 1259 OID 34029)
+-- TOC entry 198 (class 1259 OID 41961)
 -- Name: clients; Type: TABLE; Schema: test; Owner: postgrest_test
 --
 
@@ -695,7 +696,7 @@ CREATE TABLE clients (
 ALTER TABLE clients OWNER TO postgrest_test;
 
 --
--- TOC entry 199 (class 1259 OID 34035)
+-- TOC entry 199 (class 1259 OID 41967)
 -- Name: comments; Type: TABLE; Schema: test; Owner: postgrest_test
 --
 
@@ -711,7 +712,7 @@ CREATE TABLE comments (
 ALTER TABLE comments OWNER TO postgrest_test;
 
 --
--- TOC entry 200 (class 1259 OID 34041)
+-- TOC entry 200 (class 1259 OID 41973)
 -- Name: complex_items; Type: TABLE; Schema: test; Owner: postgrest_test
 --
 
@@ -726,7 +727,7 @@ CREATE TABLE complex_items (
 ALTER TABLE complex_items OWNER TO postgrest_test;
 
 --
--- TOC entry 201 (class 1259 OID 34047)
+-- TOC entry 201 (class 1259 OID 41979)
 -- Name: compound_pk; Type: TABLE; Schema: test; Owner: postgrest_test
 --
 
@@ -740,7 +741,7 @@ CREATE TABLE compound_pk (
 ALTER TABLE compound_pk OWNER TO postgrest_test;
 
 --
--- TOC entry 202 (class 1259 OID 34050)
+-- TOC entry 202 (class 1259 OID 41982)
 -- Name: empty_table; Type: TABLE; Schema: test; Owner: postgrest_test
 --
 
@@ -753,7 +754,7 @@ CREATE TABLE empty_table (
 ALTER TABLE empty_table OWNER TO postgrest_test;
 
 --
--- TOC entry 214 (class 1259 OID 34105)
+-- TOC entry 203 (class 1259 OID 41988)
 -- Name: projects; Type: TABLE; Schema: test; Owner: postgrest_test
 --
 
@@ -767,7 +768,7 @@ CREATE TABLE projects (
 ALTER TABLE projects OWNER TO postgrest_test;
 
 --
--- TOC entry 218 (class 1259 OID 34124)
+-- TOC entry 204 (class 1259 OID 41994)
 -- Name: tasks; Type: TABLE; Schema: test; Owner: postgrest_test
 --
 
@@ -781,7 +782,7 @@ CREATE TABLE tasks (
 ALTER TABLE tasks OWNER TO postgrest_test;
 
 --
--- TOC entry 217 (class 1259 OID 34121)
+-- TOC entry 205 (class 1259 OID 42000)
 -- Name: users_projects; Type: TABLE; Schema: test; Owner: postgrest_test
 --
 
@@ -794,7 +795,7 @@ CREATE TABLE users_projects (
 ALTER TABLE users_projects OWNER TO postgrest_test;
 
 --
--- TOC entry 219 (class 1259 OID 34130)
+-- TOC entry 206 (class 1259 OID 42003)
 -- Name: filtered_tasks; Type: VIEW; Schema: test; Owner: postgrest_test
 --
 
@@ -813,7 +814,7 @@ CREATE VIEW filtered_tasks AS
 ALTER TABLE filtered_tasks OWNER TO postgrest_test;
 
 --
--- TOC entry 224 (class 1259 OID 34154)
+-- TOC entry 207 (class 1259 OID 42007)
 -- Name: ghostBusters; Type: TABLE; Schema: test; Owner: postgrest_test
 --
 
@@ -825,7 +826,7 @@ CREATE TABLE "ghostBusters" (
 ALTER TABLE "ghostBusters" OWNER TO postgrest_test;
 
 --
--- TOC entry 203 (class 1259 OID 34056)
+-- TOC entry 208 (class 1259 OID 42010)
 -- Name: has_count_column; Type: VIEW; Schema: test; Owner: postgrest_test
 --
 
@@ -836,7 +837,7 @@ CREATE VIEW has_count_column AS
 ALTER TABLE has_count_column OWNER TO postgrest_test;
 
 --
--- TOC entry 204 (class 1259 OID 34060)
+-- TOC entry 209 (class 1259 OID 42014)
 -- Name: has_fk; Type: TABLE; Schema: test; Owner: postgrest_test
 --
 
@@ -850,7 +851,7 @@ CREATE TABLE has_fk (
 ALTER TABLE has_fk OWNER TO postgrest_test;
 
 --
--- TOC entry 205 (class 1259 OID 34063)
+-- TOC entry 210 (class 1259 OID 42017)
 -- Name: has_fk_id_seq; Type: SEQUENCE; Schema: test; Owner: postgrest_test
 --
 
@@ -865,8 +866,8 @@ CREATE SEQUENCE has_fk_id_seq
 ALTER TABLE has_fk_id_seq OWNER TO postgrest_test;
 
 --
--- TOC entry 2652 (class 0 OID 0)
--- Dependencies: 205
+-- TOC entry 2653 (class 0 OID 0)
+-- Dependencies: 210
 -- Name: has_fk_id_seq; Type: SEQUENCE OWNED BY; Schema: test; Owner: postgrest_test
 --
 
@@ -874,7 +875,7 @@ ALTER SEQUENCE has_fk_id_seq OWNED BY has_fk.id;
 
 
 --
--- TOC entry 206 (class 1259 OID 34065)
+-- TOC entry 211 (class 1259 OID 42019)
 -- Name: insertable_view_with_join; Type: VIEW; Schema: test; Owner: postgrest_test
 --
 
@@ -892,7 +893,7 @@ CREATE VIEW insertable_view_with_join AS
 ALTER TABLE insertable_view_with_join OWNER TO postgrest_test;
 
 --
--- TOC entry 213 (class 1259 OID 34099)
+-- TOC entry 212 (class 1259 OID 42023)
 -- Name: insertonly; Type: TABLE; Schema: test; Owner: postgrest_test
 --
 
@@ -904,7 +905,7 @@ CREATE TABLE insertonly (
 ALTER TABLE insertonly OWNER TO postgrest_test;
 
 --
--- TOC entry 207 (class 1259 OID 34069)
+-- TOC entry 213 (class 1259 OID 42029)
 -- Name: items_id_seq; Type: SEQUENCE; Schema: test; Owner: postgrest_test
 --
 
@@ -919,8 +920,8 @@ CREATE SEQUENCE items_id_seq
 ALTER TABLE items_id_seq OWNER TO postgrest_test;
 
 --
--- TOC entry 2655 (class 0 OID 0)
--- Dependencies: 207
+-- TOC entry 2656 (class 0 OID 0)
+-- Dependencies: 213
 -- Name: items_id_seq; Type: SEQUENCE OWNED BY; Schema: test; Owner: postgrest_test
 --
 
@@ -928,7 +929,7 @@ ALTER SEQUENCE items_id_seq OWNED BY items.id;
 
 
 --
--- TOC entry 208 (class 1259 OID 34071)
+-- TOC entry 214 (class 1259 OID 42031)
 -- Name: json; Type: TABLE; Schema: test; Owner: postgrest_test
 --
 
@@ -940,7 +941,7 @@ CREATE TABLE json (
 ALTER TABLE json OWNER TO postgrest_test;
 
 --
--- TOC entry 209 (class 1259 OID 34077)
+-- TOC entry 215 (class 1259 OID 42037)
 -- Name: materialized_view; Type: MATERIALIZED VIEW; Schema: test; Owner: postgrest_test
 --
 
@@ -952,7 +953,7 @@ CREATE MATERIALIZED VIEW materialized_view AS
 ALTER TABLE materialized_view OWNER TO postgrest_test;
 
 --
--- TOC entry 210 (class 1259 OID 34084)
+-- TOC entry 216 (class 1259 OID 42044)
 -- Name: menagerie; Type: TABLE; Schema: test; Owner: postgrest_test
 --
 
@@ -970,7 +971,7 @@ CREATE TABLE menagerie (
 ALTER TABLE menagerie OWNER TO postgrest_test;
 
 --
--- TOC entry 211 (class 1259 OID 34090)
+-- TOC entry 217 (class 1259 OID 42050)
 -- Name: no_pk; Type: TABLE; Schema: test; Owner: postgrest_test
 --
 
@@ -983,7 +984,7 @@ CREATE TABLE no_pk (
 ALTER TABLE no_pk OWNER TO postgrest_test;
 
 --
--- TOC entry 212 (class 1259 OID 34096)
+-- TOC entry 218 (class 1259 OID 42056)
 -- Name: nullable_integer; Type: TABLE; Schema: test; Owner: postgrest_test
 --
 
@@ -995,7 +996,7 @@ CREATE TABLE nullable_integer (
 ALTER TABLE nullable_integer OWNER TO postgrest_test;
 
 --
--- TOC entry 215 (class 1259 OID 34111)
+-- TOC entry 219 (class 1259 OID 42059)
 -- Name: projects_view; Type: VIEW; Schema: test; Owner: postgrest_test
 --
 
@@ -1009,7 +1010,7 @@ CREATE VIEW projects_view AS
 ALTER TABLE projects_view OWNER TO postgrest_test;
 
 --
--- TOC entry 216 (class 1259 OID 34115)
+-- TOC entry 220 (class 1259 OID 42063)
 -- Name: simple_pk; Type: TABLE; Schema: test; Owner: postgrest_test
 --
 
@@ -1022,7 +1023,7 @@ CREATE TABLE simple_pk (
 ALTER TABLE simple_pk OWNER TO postgrest_test;
 
 --
--- TOC entry 220 (class 1259 OID 34134)
+-- TOC entry 221 (class 1259 OID 42069)
 -- Name: tsearch; Type: TABLE; Schema: test; Owner: postgrest_test
 --
 
@@ -1034,7 +1035,7 @@ CREATE TABLE tsearch (
 ALTER TABLE tsearch OWNER TO postgrest_test;
 
 --
--- TOC entry 221 (class 1259 OID 34140)
+-- TOC entry 222 (class 1259 OID 42075)
 -- Name: users; Type: TABLE; Schema: test; Owner: postgrest_test
 --
 
@@ -1047,7 +1048,7 @@ CREATE TABLE users (
 ALTER TABLE users OWNER TO postgrest_test;
 
 --
--- TOC entry 222 (class 1259 OID 34146)
+-- TOC entry 223 (class 1259 OID 42081)
 -- Name: users_tasks; Type: TABLE; Schema: test; Owner: postgrest_test
 --
 
@@ -1060,7 +1061,7 @@ CREATE TABLE users_tasks (
 ALTER TABLE users_tasks OWNER TO postgrest_test;
 
 --
--- TOC entry 225 (class 1259 OID 34162)
+-- TOC entry 224 (class 1259 OID 42084)
 -- Name: withUnique; Type: TABLE; Schema: test; Owner: postgrest_test
 --
 
@@ -1075,7 +1076,7 @@ ALTER TABLE "withUnique" OWNER TO postgrest_test;
 SET search_path = "تست", pg_catalog;
 
 --
--- TOC entry 188 (class 1259 OID 33975)
+-- TOC entry 225 (class 1259 OID 42090)
 -- Name: موارد; Type: TABLE; Schema: تست; Owner: postgrest_test
 --
 
@@ -1089,7 +1090,7 @@ ALTER TABLE "موارد" OWNER TO postgrest_test;
 SET search_path = test, pg_catalog;
 
 --
--- TOC entry 2441 (class 2604 OID 38647)
+-- TOC entry 2442 (class 2604 OID 42093)
 -- Name: id; Type: DEFAULT; Schema: test; Owner: postgrest_test
 --
 
@@ -1097,7 +1098,7 @@ ALTER TABLE ONLY auto_incrementing_pk ALTER COLUMN id SET DEFAULT nextval('auto_
 
 
 --
--- TOC entry 2442 (class 2604 OID 38648)
+-- TOC entry 2443 (class 2604 OID 42094)
 -- Name: id; Type: DEFAULT; Schema: test; Owner: postgrest_test
 --
 
@@ -1105,7 +1106,7 @@ ALTER TABLE ONLY has_fk ALTER COLUMN id SET DEFAULT nextval('has_fk_id_seq'::reg
 
 
 --
--- TOC entry 2437 (class 2604 OID 38649)
+-- TOC entry 2438 (class 2604 OID 42095)
 -- Name: id; Type: DEFAULT; Schema: test; Owner: postgrest_test
 --
 
@@ -1115,7 +1116,7 @@ ALTER TABLE ONLY items ALTER COLUMN id SET DEFAULT nextval('items_id_seq'::regcl
 SET search_path = postgrest, pg_catalog;
 
 --
--- TOC entry 2446 (class 2606 OID 34174)
+-- TOC entry 2447 (class 2606 OID 42097)
 -- Name: auth_pkey; Type: CONSTRAINT; Schema: postgrest; Owner: postgrest_test
 --
 
@@ -1126,7 +1127,7 @@ ALTER TABLE ONLY auth
 SET search_path = private, pg_catalog;
 
 --
--- TOC entry 2450 (class 2606 OID 34176)
+-- TOC entry 2451 (class 2606 OID 42099)
 -- Name: articles_pkey; Type: CONSTRAINT; Schema: private; Owner: postgrest_test
 --
 
@@ -1135,7 +1136,7 @@ ALTER TABLE ONLY articles
 
 
 --
--- TOC entry 2448 (class 2606 OID 34178)
+-- TOC entry 2449 (class 2606 OID 42101)
 -- Name: user_article; Type: CONSTRAINT; Schema: private; Owner: postgrest_test
 --
 
@@ -1146,7 +1147,7 @@ ALTER TABLE ONLY article_stars
 SET search_path = test, pg_catalog;
 
 --
--- TOC entry 2480 (class 2606 OID 34153)
+-- TOC entry 2453 (class 2606 OID 42103)
 -- Name: Escap3e;_pkey; Type: CONSTRAINT; Schema: test; Owner: postgrest_test
 --
 
@@ -1155,7 +1156,7 @@ ALTER TABLE ONLY "Escap3e;"
 
 
 --
--- TOC entry 2452 (class 2606 OID 34180)
+-- TOC entry 2455 (class 2606 OID 42105)
 -- Name: authors_only_pkey; Type: CONSTRAINT; Schema: test; Owner: postgrest_test
 --
 
@@ -1164,7 +1165,7 @@ ALTER TABLE ONLY authors_only
 
 
 --
--- TOC entry 2454 (class 2606 OID 34182)
+-- TOC entry 2457 (class 2606 OID 42107)
 -- Name: auto_incrementing_pk_pkey; Type: CONSTRAINT; Schema: test; Owner: postgrest_test
 --
 
@@ -1173,7 +1174,7 @@ ALTER TABLE ONLY auto_incrementing_pk
 
 
 --
--- TOC entry 2456 (class 2606 OID 34184)
+-- TOC entry 2459 (class 2606 OID 42109)
 -- Name: clients_pkey; Type: CONSTRAINT; Schema: test; Owner: postgrest_test
 --
 
@@ -1182,7 +1183,7 @@ ALTER TABLE ONLY clients
 
 
 --
--- TOC entry 2458 (class 2606 OID 34186)
+-- TOC entry 2461 (class 2606 OID 42111)
 -- Name: comments_pkey; Type: CONSTRAINT; Schema: test; Owner: postgrest_test
 --
 
@@ -1191,7 +1192,7 @@ ALTER TABLE ONLY comments
 
 
 --
--- TOC entry 2460 (class 2606 OID 34188)
+-- TOC entry 2463 (class 2606 OID 42113)
 -- Name: complex_items_pkey; Type: CONSTRAINT; Schema: test; Owner: postgrest_test
 --
 
@@ -1200,7 +1201,7 @@ ALTER TABLE ONLY complex_items
 
 
 --
--- TOC entry 2462 (class 2606 OID 34190)
+-- TOC entry 2465 (class 2606 OID 42115)
 -- Name: compound_pk_pkey; Type: CONSTRAINT; Schema: test; Owner: postgrest_test
 --
 
@@ -1209,7 +1210,7 @@ ALTER TABLE ONLY compound_pk
 
 
 --
--- TOC entry 2470 (class 2606 OID 34192)
+-- TOC entry 2477 (class 2606 OID 42117)
 -- Name: contacts_pkey; Type: CONSTRAINT; Schema: test; Owner: postgrest_test
 --
 
@@ -1218,7 +1219,7 @@ ALTER TABLE ONLY simple_pk
 
 
 --
--- TOC entry 2464 (class 2606 OID 34194)
+-- TOC entry 2473 (class 2606 OID 42119)
 -- Name: has_fk_pkey; Type: CONSTRAINT; Schema: test; Owner: postgrest_test
 --
 
@@ -1227,7 +1228,7 @@ ALTER TABLE ONLY has_fk
 
 
 --
--- TOC entry 2444 (class 2606 OID 34196)
+-- TOC entry 2445 (class 2606 OID 42121)
 -- Name: items_pkey; Type: CONSTRAINT; Schema: test; Owner: postgrest_test
 --
 
@@ -1236,7 +1237,7 @@ ALTER TABLE ONLY items
 
 
 --
--- TOC entry 2466 (class 2606 OID 34198)
+-- TOC entry 2475 (class 2606 OID 42123)
 -- Name: menagerie_pkey; Type: CONSTRAINT; Schema: test; Owner: postgrest_test
 --
 
@@ -1245,7 +1246,7 @@ ALTER TABLE ONLY menagerie
 
 
 --
--- TOC entry 2472 (class 2606 OID 34200)
+-- TOC entry 2471 (class 2606 OID 42125)
 -- Name: project_user; Type: CONSTRAINT; Schema: test; Owner: postgrest_test
 --
 
@@ -1254,7 +1255,7 @@ ALTER TABLE ONLY users_projects
 
 
 --
--- TOC entry 2468 (class 2606 OID 34202)
+-- TOC entry 2467 (class 2606 OID 42127)
 -- Name: projects_pkey; Type: CONSTRAINT; Schema: test; Owner: postgrest_test
 --
 
@@ -1263,7 +1264,7 @@ ALTER TABLE ONLY projects
 
 
 --
--- TOC entry 2478 (class 2606 OID 34204)
+-- TOC entry 2481 (class 2606 OID 42129)
 -- Name: task_user; Type: CONSTRAINT; Schema: test; Owner: postgrest_test
 --
 
@@ -1272,7 +1273,7 @@ ALTER TABLE ONLY users_tasks
 
 
 --
--- TOC entry 2474 (class 2606 OID 34206)
+-- TOC entry 2469 (class 2606 OID 42131)
 -- Name: tasks_pkey; Type: CONSTRAINT; Schema: test; Owner: postgrest_test
 --
 
@@ -1281,7 +1282,7 @@ ALTER TABLE ONLY tasks
 
 
 --
--- TOC entry 2476 (class 2606 OID 34208)
+-- TOC entry 2479 (class 2606 OID 42133)
 -- Name: users_pkey; Type: CONSTRAINT; Schema: test; Owner: postgrest_test
 --
 
@@ -1290,7 +1291,7 @@ ALTER TABLE ONLY users
 
 
 --
--- TOC entry 2482 (class 2606 OID 34169)
+-- TOC entry 2483 (class 2606 OID 42135)
 -- Name: withUnique_uni_key; Type: CONSTRAINT; Schema: test; Owner: postgrest_test
 --
 
@@ -1301,7 +1302,7 @@ ALTER TABLE ONLY "withUnique"
 SET search_path = postgrest, pg_catalog;
 
 --
--- TOC entry 2496 (class 2620 OID 34210)
+-- TOC entry 2497 (class 2620 OID 42137)
 -- Name: ensure_auth_role_exists; Type: TRIGGER; Schema: postgrest; Owner: postgrest_test
 --
 
@@ -1311,7 +1312,7 @@ CREATE CONSTRAINT TRIGGER ensure_auth_role_exists AFTER INSERT OR UPDATE ON auth
 SET search_path = private, pg_catalog;
 
 --
--- TOC entry 2497 (class 2620 OID 34211)
+-- TOC entry 2498 (class 2620 OID 42138)
 -- Name: articles_owner_track; Type: TRIGGER; Schema: private; Owner: postgrest_test
 --
 
@@ -1321,7 +1322,7 @@ CREATE TRIGGER articles_owner_track BEFORE INSERT OR UPDATE ON articles FOR EACH
 SET search_path = test, pg_catalog;
 
 --
--- TOC entry 2499 (class 2620 OID 34212)
+-- TOC entry 2500 (class 2620 OID 42139)
 -- Name: insert_insertable_view_with_join; Type: TRIGGER; Schema: test; Owner: postgrest_test
 --
 
@@ -1329,7 +1330,7 @@ CREATE TRIGGER insert_insertable_view_with_join INSTEAD OF INSERT ON insertable_
 
 
 --
--- TOC entry 2498 (class 2620 OID 34213)
+-- TOC entry 2499 (class 2620 OID 42140)
 -- Name: secrets_owner_track; Type: TRIGGER; Schema: test; Owner: postgrest_test
 --
 
@@ -1339,7 +1340,7 @@ CREATE TRIGGER secrets_owner_track BEFORE INSERT OR UPDATE ON authors_only FOR E
 SET search_path = private, pg_catalog;
 
 --
--- TOC entry 2483 (class 2606 OID 34214)
+-- TOC entry 2484 (class 2606 OID 42141)
 -- Name: article_stars_article_id_fkey; Type: FK CONSTRAINT; Schema: private; Owner: postgrest_test
 --
 
@@ -1348,7 +1349,7 @@ ALTER TABLE ONLY article_stars
 
 
 --
--- TOC entry 2484 (class 2606 OID 34219)
+-- TOC entry 2485 (class 2606 OID 42146)
 -- Name: article_stars_user_id_fkey; Type: FK CONSTRAINT; Schema: private; Owner: postgrest_test
 --
 
@@ -1359,7 +1360,7 @@ ALTER TABLE ONLY article_stars
 SET search_path = test, pg_catalog;
 
 --
--- TOC entry 2485 (class 2606 OID 34224)
+-- TOC entry 2486 (class 2606 OID 42151)
 -- Name: comments_commenter_id_fkey; Type: FK CONSTRAINT; Schema: test; Owner: postgrest_test
 --
 
@@ -1368,7 +1369,7 @@ ALTER TABLE ONLY comments
 
 
 --
--- TOC entry 2486 (class 2606 OID 34229)
+-- TOC entry 2487 (class 2606 OID 42156)
 -- Name: comments_task_id_fkey; Type: FK CONSTRAINT; Schema: test; Owner: postgrest_test
 --
 
@@ -1377,7 +1378,7 @@ ALTER TABLE ONLY comments
 
 
 --
--- TOC entry 2495 (class 2606 OID 34157)
+-- TOC entry 2492 (class 2606 OID 42161)
 -- Name: ghostBusters_escapeId_fkey; Type: FK CONSTRAINT; Schema: test; Owner: postgrest_test
 --
 
@@ -1386,7 +1387,7 @@ ALTER TABLE ONLY "ghostBusters"
 
 
 --
--- TOC entry 2487 (class 2606 OID 34234)
+-- TOC entry 2493 (class 2606 OID 42166)
 -- Name: has_fk_fk_fkey; Type: FK CONSTRAINT; Schema: test; Owner: postgrest_test
 --
 
@@ -1395,7 +1396,7 @@ ALTER TABLE ONLY has_fk
 
 
 --
--- TOC entry 2488 (class 2606 OID 34239)
+-- TOC entry 2494 (class 2606 OID 42171)
 -- Name: has_fk_simple_fk_fkey; Type: FK CONSTRAINT; Schema: test; Owner: postgrest_test
 --
 
@@ -1404,7 +1405,7 @@ ALTER TABLE ONLY has_fk
 
 
 --
--- TOC entry 2489 (class 2606 OID 34244)
+-- TOC entry 2488 (class 2606 OID 42176)
 -- Name: projects_client_id_fkey; Type: FK CONSTRAINT; Schema: test; Owner: postgrest_test
 --
 
@@ -1413,7 +1414,7 @@ ALTER TABLE ONLY projects
 
 
 --
--- TOC entry 2492 (class 2606 OID 34249)
+-- TOC entry 2489 (class 2606 OID 42181)
 -- Name: tasks_project_id_fkey; Type: FK CONSTRAINT; Schema: test; Owner: postgrest_test
 --
 
@@ -1422,7 +1423,7 @@ ALTER TABLE ONLY tasks
 
 
 --
--- TOC entry 2490 (class 2606 OID 34254)
+-- TOC entry 2490 (class 2606 OID 42186)
 -- Name: users_projects_project_id_fkey; Type: FK CONSTRAINT; Schema: test; Owner: postgrest_test
 --
 
@@ -1431,7 +1432,7 @@ ALTER TABLE ONLY users_projects
 
 
 --
--- TOC entry 2491 (class 2606 OID 34259)
+-- TOC entry 2491 (class 2606 OID 42191)
 -- Name: users_projects_user_id_fkey; Type: FK CONSTRAINT; Schema: test; Owner: postgrest_test
 --
 
@@ -1440,7 +1441,7 @@ ALTER TABLE ONLY users_projects
 
 
 --
--- TOC entry 2493 (class 2606 OID 34264)
+-- TOC entry 2495 (class 2606 OID 42196)
 -- Name: users_tasks_task_id_fkey; Type: FK CONSTRAINT; Schema: test; Owner: postgrest_test
 --
 
@@ -1449,7 +1450,7 @@ ALTER TABLE ONLY users_tasks
 
 
 --
--- TOC entry 2494 (class 2606 OID 34269)
+-- TOC entry 2496 (class 2606 OID 42201)
 -- Name: users_tasks_user_id_fkey; Type: FK CONSTRAINT; Schema: test; Owner: postgrest_test
 --
 
@@ -1458,7 +1459,7 @@ ALTER TABLE ONLY users_tasks
 
 
 --
--- TOC entry 2626 (class 0 OID 0)
+-- TOC entry 2627 (class 0 OID 0)
 -- Dependencies: 9
 -- Name: postgrest; Type: ACL; Schema: -; Owner: postgrest_test
 --
@@ -1470,7 +1471,7 @@ GRANT USAGE ON SCHEMA postgrest TO postgrest_test_anonymous;
 
 
 --
--- TOC entry 2628 (class 0 OID 0)
+-- TOC entry 2629 (class 0 OID 0)
 -- Dependencies: 8
 -- Name: public; Type: ACL; Schema: -; Owner: j
 --
@@ -1482,7 +1483,7 @@ GRANT ALL ON SCHEMA public TO PUBLIC;
 
 
 --
--- TOC entry 2629 (class 0 OID 0)
+-- TOC entry 2630 (class 0 OID 0)
 -- Dependencies: 11
 -- Name: test; Type: ACL; Schema: -; Owner: postgrest_test
 --
@@ -1495,7 +1496,7 @@ GRANT USAGE ON SCHEMA test TO postgrest_test_author;
 
 
 --
--- TOC entry 2630 (class 0 OID 0)
+-- TOC entry 2631 (class 0 OID 0)
 -- Dependencies: 10
 -- Name: تست; Type: ACL; Schema: -; Owner: postgrest_test
 --
@@ -1507,7 +1508,7 @@ GRANT USAGE ON SCHEMA "تست" TO postgrest_test_anonymous;
 
 
 --
--- TOC entry 2632 (class 0 OID 0)
+-- TOC entry 2633 (class 0 OID 0)
 -- Dependencies: 187
 -- Name: items; Type: ACL; Schema: test; Owner: postgrest_test
 --
@@ -1519,8 +1520,8 @@ GRANT ALL ON TABLE items TO postgrest_test_anonymous;
 
 
 --
--- TOC entry 2633 (class 0 OID 0)
--- Dependencies: 223
+-- TOC entry 2634 (class 0 OID 0)
+-- Dependencies: 191
 -- Name: Escap3e;; Type: ACL; Schema: test; Owner: postgrest_test
 --
 
@@ -1531,8 +1532,8 @@ GRANT ALL ON TABLE "Escap3e;" TO postgrest_test_anonymous;
 
 
 --
--- TOC entry 2634 (class 0 OID 0)
--- Dependencies: 193
+-- TOC entry 2635 (class 0 OID 0)
+-- Dependencies: 192
 -- Name: articleStars; Type: ACL; Schema: test; Owner: postgrest_test
 --
 
@@ -1543,8 +1544,8 @@ GRANT ALL ON TABLE "articleStars" TO postgrest_test_anonymous;
 
 
 --
--- TOC entry 2635 (class 0 OID 0)
--- Dependencies: 194
+-- TOC entry 2636 (class 0 OID 0)
+-- Dependencies: 193
 -- Name: articles; Type: ACL; Schema: test; Owner: postgrest_test
 --
 
@@ -1555,8 +1556,8 @@ GRANT ALL ON TABLE articles TO postgrest_test_anonymous;
 
 
 --
--- TOC entry 2636 (class 0 OID 0)
--- Dependencies: 195
+-- TOC entry 2637 (class 0 OID 0)
+-- Dependencies: 194
 -- Name: authors_only; Type: ACL; Schema: test; Owner: postgrest_test
 --
 
@@ -1567,8 +1568,8 @@ GRANT ALL ON TABLE authors_only TO postgrest_test_author;
 
 
 --
--- TOC entry 2637 (class 0 OID 0)
--- Dependencies: 196
+-- TOC entry 2638 (class 0 OID 0)
+-- Dependencies: 195
 -- Name: auto_incrementing_pk; Type: ACL; Schema: test; Owner: postgrest_test
 --
 
@@ -1579,8 +1580,8 @@ GRANT ALL ON TABLE auto_incrementing_pk TO postgrest_test_anonymous;
 
 
 --
--- TOC entry 2639 (class 0 OID 0)
--- Dependencies: 197
+-- TOC entry 2640 (class 0 OID 0)
+-- Dependencies: 196
 -- Name: auto_incrementing_pk_id_seq; Type: ACL; Schema: test; Owner: postgrest_test
 --
 
@@ -1591,8 +1592,8 @@ GRANT USAGE ON SEQUENCE auto_incrementing_pk_id_seq TO postgrest_test_anonymous;
 
 
 --
--- TOC entry 2640 (class 0 OID 0)
--- Dependencies: 189
+-- TOC entry 2641 (class 0 OID 0)
+-- Dependencies: 197
 -- Name: callcounter_count; Type: ACL; Schema: test; Owner: postgrest_test
 --
 
@@ -1603,7 +1604,7 @@ GRANT USAGE ON SEQUENCE callcounter_count TO postgrest_test_anonymous;
 
 
 --
--- TOC entry 2641 (class 0 OID 0)
+-- TOC entry 2642 (class 0 OID 0)
 -- Dependencies: 198
 -- Name: clients; Type: ACL; Schema: test; Owner: postgrest_test
 --
@@ -1615,7 +1616,7 @@ GRANT ALL ON TABLE clients TO postgrest_test_anonymous;
 
 
 --
--- TOC entry 2642 (class 0 OID 0)
+-- TOC entry 2643 (class 0 OID 0)
 -- Dependencies: 199
 -- Name: comments; Type: ACL; Schema: test; Owner: postgrest_test
 --
@@ -1627,7 +1628,7 @@ GRANT ALL ON TABLE comments TO postgrest_test_anonymous;
 
 
 --
--- TOC entry 2643 (class 0 OID 0)
+-- TOC entry 2644 (class 0 OID 0)
 -- Dependencies: 200
 -- Name: complex_items; Type: ACL; Schema: test; Owner: postgrest_test
 --
@@ -1639,7 +1640,7 @@ GRANT ALL ON TABLE complex_items TO postgrest_test_anonymous;
 
 
 --
--- TOC entry 2644 (class 0 OID 0)
+-- TOC entry 2645 (class 0 OID 0)
 -- Dependencies: 201
 -- Name: compound_pk; Type: ACL; Schema: test; Owner: postgrest_test
 --
@@ -1651,8 +1652,8 @@ GRANT ALL ON TABLE compound_pk TO postgrest_test_anonymous;
 
 
 --
--- TOC entry 2645 (class 0 OID 0)
--- Dependencies: 214
+-- TOC entry 2646 (class 0 OID 0)
+-- Dependencies: 203
 -- Name: projects; Type: ACL; Schema: test; Owner: postgrest_test
 --
 
@@ -1663,8 +1664,8 @@ GRANT ALL ON TABLE projects TO postgrest_test_anonymous;
 
 
 --
--- TOC entry 2646 (class 0 OID 0)
--- Dependencies: 218
+-- TOC entry 2647 (class 0 OID 0)
+-- Dependencies: 204
 -- Name: tasks; Type: ACL; Schema: test; Owner: postgrest_test
 --
 
@@ -1675,8 +1676,8 @@ GRANT ALL ON TABLE tasks TO postgrest_test_anonymous;
 
 
 --
--- TOC entry 2647 (class 0 OID 0)
--- Dependencies: 217
+-- TOC entry 2648 (class 0 OID 0)
+-- Dependencies: 205
 -- Name: users_projects; Type: ACL; Schema: test; Owner: postgrest_test
 --
 
@@ -1687,8 +1688,8 @@ GRANT ALL ON TABLE users_projects TO postgrest_test_anonymous;
 
 
 --
--- TOC entry 2648 (class 0 OID 0)
--- Dependencies: 219
+-- TOC entry 2649 (class 0 OID 0)
+-- Dependencies: 206
 -- Name: filtered_tasks; Type: ACL; Schema: test; Owner: postgrest_test
 --
 
@@ -1699,8 +1700,8 @@ GRANT ALL ON TABLE filtered_tasks TO postgrest_test_anonymous;
 
 
 --
--- TOC entry 2649 (class 0 OID 0)
--- Dependencies: 224
+-- TOC entry 2650 (class 0 OID 0)
+-- Dependencies: 207
 -- Name: ghostBusters; Type: ACL; Schema: test; Owner: postgrest_test
 --
 
@@ -1711,8 +1712,8 @@ GRANT ALL ON TABLE "ghostBusters" TO postgrest_test_anonymous;
 
 
 --
--- TOC entry 2650 (class 0 OID 0)
--- Dependencies: 203
+-- TOC entry 2651 (class 0 OID 0)
+-- Dependencies: 208
 -- Name: has_count_column; Type: ACL; Schema: test; Owner: postgrest_test
 --
 
@@ -1723,8 +1724,8 @@ GRANT ALL ON TABLE has_count_column TO postgrest_test_anonymous;
 
 
 --
--- TOC entry 2651 (class 0 OID 0)
--- Dependencies: 204
+-- TOC entry 2652 (class 0 OID 0)
+-- Dependencies: 209
 -- Name: has_fk; Type: ACL; Schema: test; Owner: postgrest_test
 --
 
@@ -1735,8 +1736,8 @@ GRANT ALL ON TABLE has_fk TO postgrest_test_anonymous;
 
 
 --
--- TOC entry 2653 (class 0 OID 0)
--- Dependencies: 206
+-- TOC entry 2654 (class 0 OID 0)
+-- Dependencies: 211
 -- Name: insertable_view_with_join; Type: ACL; Schema: test; Owner: postgrest_test
 --
 
@@ -1747,8 +1748,8 @@ GRANT ALL ON TABLE insertable_view_with_join TO postgrest_test_anonymous;
 
 
 --
--- TOC entry 2654 (class 0 OID 0)
--- Dependencies: 213
+-- TOC entry 2655 (class 0 OID 0)
+-- Dependencies: 212
 -- Name: insertonly; Type: ACL; Schema: test; Owner: postgrest_test
 --
 
@@ -1759,8 +1760,8 @@ GRANT INSERT ON TABLE insertonly TO postgrest_test_anonymous;
 
 
 --
--- TOC entry 2656 (class 0 OID 0)
--- Dependencies: 207
+-- TOC entry 2657 (class 0 OID 0)
+-- Dependencies: 213
 -- Name: items_id_seq; Type: ACL; Schema: test; Owner: postgrest_test
 --
 
@@ -1771,8 +1772,8 @@ GRANT USAGE ON SEQUENCE items_id_seq TO postgrest_test_anonymous;
 
 
 --
--- TOC entry 2657 (class 0 OID 0)
--- Dependencies: 208
+-- TOC entry 2658 (class 0 OID 0)
+-- Dependencies: 214
 -- Name: json; Type: ACL; Schema: test; Owner: postgrest_test
 --
 
@@ -1783,8 +1784,8 @@ GRANT ALL ON TABLE json TO postgrest_test_anonymous;
 
 
 --
--- TOC entry 2658 (class 0 OID 0)
--- Dependencies: 209
+-- TOC entry 2659 (class 0 OID 0)
+-- Dependencies: 215
 -- Name: materialized_view; Type: ACL; Schema: test; Owner: postgrest_test
 --
 
@@ -1795,8 +1796,8 @@ GRANT ALL ON TABLE materialized_view TO postgrest_test_anonymous;
 
 
 --
--- TOC entry 2659 (class 0 OID 0)
--- Dependencies: 210
+-- TOC entry 2660 (class 0 OID 0)
+-- Dependencies: 216
 -- Name: menagerie; Type: ACL; Schema: test; Owner: postgrest_test
 --
 
@@ -1807,8 +1808,8 @@ GRANT ALL ON TABLE menagerie TO postgrest_test_anonymous;
 
 
 --
--- TOC entry 2660 (class 0 OID 0)
--- Dependencies: 211
+-- TOC entry 2661 (class 0 OID 0)
+-- Dependencies: 217
 -- Name: no_pk; Type: ACL; Schema: test; Owner: postgrest_test
 --
 
@@ -1819,8 +1820,8 @@ GRANT ALL ON TABLE no_pk TO postgrest_test_anonymous;
 
 
 --
--- TOC entry 2661 (class 0 OID 0)
--- Dependencies: 212
+-- TOC entry 2662 (class 0 OID 0)
+-- Dependencies: 218
 -- Name: nullable_integer; Type: ACL; Schema: test; Owner: postgrest_test
 --
 
@@ -1831,8 +1832,8 @@ GRANT ALL ON TABLE nullable_integer TO postgrest_test_anonymous;
 
 
 --
--- TOC entry 2662 (class 0 OID 0)
--- Dependencies: 215
+-- TOC entry 2663 (class 0 OID 0)
+-- Dependencies: 219
 -- Name: projects_view; Type: ACL; Schema: test; Owner: postgrest_test
 --
 
@@ -1843,8 +1844,8 @@ GRANT ALL ON TABLE projects_view TO postgrest_test_anonymous;
 
 
 --
--- TOC entry 2663 (class 0 OID 0)
--- Dependencies: 216
+-- TOC entry 2664 (class 0 OID 0)
+-- Dependencies: 220
 -- Name: simple_pk; Type: ACL; Schema: test; Owner: postgrest_test
 --
 
@@ -1855,8 +1856,8 @@ GRANT ALL ON TABLE simple_pk TO postgrest_test_anonymous;
 
 
 --
--- TOC entry 2664 (class 0 OID 0)
--- Dependencies: 220
+-- TOC entry 2665 (class 0 OID 0)
+-- Dependencies: 221
 -- Name: tsearch; Type: ACL; Schema: test; Owner: postgrest_test
 --
 
@@ -1867,8 +1868,8 @@ GRANT ALL ON TABLE tsearch TO postgrest_test_anonymous;
 
 
 --
--- TOC entry 2665 (class 0 OID 0)
--- Dependencies: 221
+-- TOC entry 2666 (class 0 OID 0)
+-- Dependencies: 222
 -- Name: users; Type: ACL; Schema: test; Owner: postgrest_test
 --
 
@@ -1879,8 +1880,8 @@ GRANT ALL ON TABLE users TO postgrest_test_anonymous;
 
 
 --
--- TOC entry 2666 (class 0 OID 0)
--- Dependencies: 222
+-- TOC entry 2667 (class 0 OID 0)
+-- Dependencies: 223
 -- Name: users_tasks; Type: ACL; Schema: test; Owner: postgrest_test
 --
 
@@ -1891,8 +1892,8 @@ GRANT ALL ON TABLE users_tasks TO postgrest_test_anonymous;
 
 
 --
--- TOC entry 2667 (class 0 OID 0)
--- Dependencies: 225
+-- TOC entry 2668 (class 0 OID 0)
+-- Dependencies: 224
 -- Name: withUnique; Type: ACL; Schema: test; Owner: postgrest_test
 --
 
@@ -1905,8 +1906,8 @@ GRANT ALL ON TABLE "withUnique" TO postgrest_test_anonymous;
 SET search_path = "تست", pg_catalog;
 
 --
--- TOC entry 2668 (class 0 OID 0)
--- Dependencies: 188
+-- TOC entry 2669 (class 0 OID 0)
+-- Dependencies: 225
 -- Name: موارد; Type: ACL; Schema: تست; Owner: postgrest_test
 --
 
@@ -1916,7 +1917,7 @@ GRANT ALL ON TABLE "موارد" TO postgrest_test;
 GRANT ALL ON TABLE "موارد" TO postgrest_test_anonymous;
 
 
--- Completed on 2016-04-24 14:03:36 PDT
+-- Completed on 2016-04-24 23:21:50 PDT
 
 --
 -- PostgreSQL database dump complete

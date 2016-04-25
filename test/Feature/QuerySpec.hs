@@ -442,8 +442,9 @@ spec = do
 
   describe "weird requests" $ do
     it "can query as normal" $ do
-      get "/Escap3e;" `shouldRespondWith`
+      get "/Escap3e;?select=so6meIdColumn" `shouldRespondWith`
         [json| [{"so6meIdColumn":1},{"so6meIdColumn":2},{"so6meIdColumn":3},{"so6meIdColumn":4},{"so6meIdColumn":5}] |]
+      get "/Escap3e;?select=hyphenated-column" `shouldRespondWith` 200
       get "/ghostBusters" `shouldRespondWith`
         [json| [{"escapeId":1},{"escapeId":3},{"escapeId":5}] |]
 
@@ -452,5 +453,5 @@ spec = do
         [json| [{"ghostBusters":[{"escapeId":1}]},{"ghostBusters":[]},{"ghostBusters":[{"escapeId":3}]},{"ghostBusters":[]},{"ghostBusters":[{"escapeId":5}]}] |]
 
     it "will embed using a column" $
-      get "/ghostBusters?select=escapeId{*}" `shouldRespondWith`
+      get "/ghostBusters?select=escapeId{so6meIdColumn}" `shouldRespondWith`
         [json| [{"escapeId":{"so6meIdColumn":1}},{"escapeId":{"so6meIdColumn":3}},{"escapeId":{"so6meIdColumn":5}}] |]
